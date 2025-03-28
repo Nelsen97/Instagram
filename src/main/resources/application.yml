@@ -1,0 +1,29 @@
+server:
+  port: 8080
+
+spring:
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 50MB
+  datasource:
+    url: jdbc:postgresql://localhost:5432/microgram_db
+    username: postgres
+    password: 12345678
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+  profiles:
+    active: local
+
+
+
+
+
+
+security:
+  jwt:
+    secret: 0451d3c492d6099c7363b58de3bf1048490bc72b51dd4ee2de080503430f0766
+    access: 1
+    refresh: 7
