@@ -6,6 +6,9 @@ spring:
     multipart:
       enabled: true
       max-file-size: 50MB
+  web:
+    resources:
+      add-mappings: false
   datasource:
     url: jdbc:postgresql://localhost:5432/microgram_db
     username: postgres

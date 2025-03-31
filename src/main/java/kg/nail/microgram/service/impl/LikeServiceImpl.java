@@ -1,12 +1,15 @@
 package kg.nail.microgram.service.impl;
 
 import kg.nail.microgram.entity.Like;
+import kg.nail.microgram.entity.Publication;
 import kg.nail.microgram.exception.NotFoundException;
 import kg.nail.microgram.repository.LikeRepository;
 import kg.nail.microgram.service.LikeService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -34,5 +37,10 @@ public class LikeServiceImpl implements LikeService {
         return likeRepository.findLikeByPublicationIdAndUserId(publicationId, userId).orElseThrow(
                 () -> new NotFoundException("Лайка на публикацию с id: %d от пользователя: %d не сушествует".formatted(publicationId, userId))
         );
+    }
+
+    @Override
+    public Page<Publication> getPublicationsLikedByUserId(Pageable pageable, Long userId) {
+        return likeRepository.findLikeByUserId(pageable, userId).map(Like::getPublication);
     }
 }

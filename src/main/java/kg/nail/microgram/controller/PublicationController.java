@@ -40,9 +40,22 @@ public class PublicationController {
         return new ResponseEntity<>(publicationFacade.getAllPublications(pageable), HttpStatus.OK);
     }
 
+    @GetMapping("liked")
+    public ResponseEntity<Page<PublicationListResponse>> getLikedPublications(@PageableDefault Pageable pageable,
+                                                                              @AuthenticationPrincipal JwtEntity jwtEntity) {
+        return new ResponseEntity<>(publicationFacade.getLikedPublications(pageable, jwtEntity), HttpStatus.OK);
+    }
+
+    @GetMapping("subscriptions")
+    public ResponseEntity<Page<PublicationListResponse>> getPublicationsBySubscriptions(@PageableDefault Pageable pageable,
+                                                                          @AuthenticationPrincipal JwtEntity jwtEntity) {
+
+        return new ResponseEntity<>(publicationFacade.getPublicationsBySubscriptions(pageable, jwtEntity), HttpStatus.OK);
+    }
+
     @PostMapping("/create")
     public ResponseEntity<Void> createPublication(@RequestPart("files") MultipartFile[] files,
-                                                  @Valid PublicationCreateRequestDTO publicationCreateRequestDTO,
+                                                  @Valid @RequestBody PublicationCreateRequestDTO publicationCreateRequestDTO,
                                                   @AuthenticationPrincipal JwtEntity currentUser) {
         publicationFacade.createPublication(files, publicationCreateRequestDTO, currentUser);
         return ResponseEntity.ok().build();

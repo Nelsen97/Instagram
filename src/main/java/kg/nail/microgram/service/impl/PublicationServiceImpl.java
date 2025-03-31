@@ -11,6 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -33,6 +35,11 @@ public class PublicationServiceImpl implements PublicationService {
     @Override
     public void save(Publication publication) {
         publicationRepository.save(publication);
+    }
+
+    @Override
+    public Page<Publication> getPublicationsBySubscriptionIds(Pageable pageable, List<Long> subscriptionIds) {
+        return publicationRepository.findPublicationsByUserIdIn(pageable, subscriptionIds);
     }
 
 

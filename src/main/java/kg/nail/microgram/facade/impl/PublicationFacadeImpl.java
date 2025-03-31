@@ -1,10 +1,10 @@
 package kg.nail.microgram.facade.impl;
 
-import kg.nail.microgram.dto.comment.response.CommentPublicationResponse;
 import kg.nail.microgram.dto.publication.request.PublicationCreateRequestDTO;
 import kg.nail.microgram.dto.publication.request.PublicationUpdateRequestDTO;
 import kg.nail.microgram.dto.publication.response.PublicationListResponse;
 import kg.nail.microgram.dto.publication.response.PublicationResponse;
+import kg.nail.microgram.entity.BaseEntity;
 import kg.nail.microgram.entity.Publication;
 import kg.nail.microgram.entity.User;
 import kg.nail.microgram.exception.BadRequestException;
@@ -12,10 +12,11 @@ import kg.nail.microgram.exception.FileStorageException;
 import kg.nail.microgram.exception.NotFoundException;
 import kg.nail.microgram.facade.PublicationFacade;
 import kg.nail.microgram.mapper.PublicationMapper;
+import kg.nail.microgram.repository.PublicationRepository;
 import kg.nail.microgram.security.JwtEntity;
-import kg.nail.microgram.service.CommentService;
 import kg.nail.microgram.service.LikeService;
 import kg.nail.microgram.service.PublicationService;
+import kg.nail.microgram.service.SubscriptionService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -43,8 +44,8 @@ import java.util.UUID;
 public class PublicationFacadeImpl implements PublicationFacade {
     final PublicationService publicationService;
     final PublicationMapper publicationMapper;
-    final CommentService commentService;
     final LikeService likeService;
+    final SubscriptionService subscriptionService;
 
     @Value("${upload.dir.path}")
     String uploadDir;
@@ -52,14 +53,8 @@ public class PublicationFacadeImpl implements PublicationFacade {
     @Override
     public PublicationResponse getPublication(Long publicationId) {
         Publication publication = publicationService.getPublicationById(publicationId);
-        PublicationResponse publicationResponse = publicationMapper.publicationEntityToPublicationResponse(publication);
-        List<CommentPublicationResponse> commentsByPublicationId =
-                commentService.getCommentsByPublicationId(publication.getId());
-        long countLikesByPublicationId = likeService.countLikesByPublicationId(publicationId);
-        publicationResponse.setComments(commentsByPublicationId);
-        publicationResponse.setCountLikes(countLikesByPublicationId);
 
-        return publicationResponse;
+        return publicationMapper.publicationEntityToPublicationResponse(publication);
     }
 
     @Override
@@ -67,15 +62,6 @@ public class PublicationFacadeImpl implements PublicationFacade {
         Page<Publication> publications = publicationService.getAll(pageable);
         List<PublicationListResponse> publicationListResponses =
                 publicationMapper.publicationEntityToPublicationListResponse(publications.getContent());
-
-        publicationListResponses.forEach(pub -> {
-                    List<CommentPublicationResponse> commentsByPublicationId =
-                            commentService.getCommentsByPublicationId(pub.getId());
-                    long countLikesByPublicationId = likeService.countLikesByPublicationId(pub.getId());
-                    pub.setComments(commentsByPublicationId);
-                    pub.setCountLikes(countLikesByPublicationId);
-                }
-        );
 
         return new PageImpl<>(publicationListResponses, pageable, publications.getTotalElements());
     }
@@ -139,4 +125,26 @@ public class PublicationFacadeImpl implements PublicationFacade {
         }
 
     }
+
+    @Override
+    public Page<PublicationListResponse> getLikedPublications(Pageable pageable, JwtEntity jwtEntity) {
+        Page<Publication> publicationsLikedByUserId = likeService.getPublicationsLikedByUserId(pageable, jwtEntity.getId());
+        List<PublicationListResponse> publicationListResponses = publicationMapper.publicationEntityToPublicationListResponse(publicationsLikedByUserId.getContent());
+
+        return new PageImpl<>(publicationListResponses, pageable, publicationsLikedByUserId.getTotalElements());
+    }
+
+    @Override
+    public Page<PublicationListResponse> getPublicationsBySubscriptions(Pageable pageable, JwtEntity jwtEntity) {
+        Page<User> userSubscriptions = subscriptionService.getSubscriptionsBySubscriberId(pageable, jwtEntity.getId());
+        Page<Publication> publicationsBySubscriptionIds = publicationService.getPublicationsBySubscriptionIds
+                (pageable, userSubscriptions.map(BaseEntity::getId).getContent());
+
+        List<PublicationListResponse> publicationListResponses =
+                publicationMapper.publicationEntityToPublicationListResponse(publicationsBySubscriptionIds.getContent());
+
+        return new PageImpl<>(publicationListResponses, pageable, userSubscriptions.getTotalElements());
+    }
+
+
 }

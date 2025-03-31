@@ -23,4 +23,5 @@ public class PublicationResponse {
     LocalDateTime updatedAt;
     Long countLikes;
     List<CommentPublicationResponse> comments;
+    int countComments;
 }

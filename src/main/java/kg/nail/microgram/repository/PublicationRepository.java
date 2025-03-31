@@ -1,7 +1,13 @@
 package kg.nail.microgram.repository;
 
 import kg.nail.microgram.entity.Publication;
+import kg.nail.microgram.entity.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface PublicationRepository extends JpaRepository<Publication, Long> {
+    Page<Publication> findPublicationsByUserIdIn(Pageable pageable, List<Long> userIds);
 }

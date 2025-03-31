@@ -24,4 +24,8 @@ public interface PublicationFacade {
     void deletePublicationById(Long id);
 
     Resource getPublicationImageByPhotoName(String photoName);
+
+    Page<PublicationListResponse> getLikedPublications(Pageable pageable, JwtEntity jwtEntity);
+
+    Page<PublicationListResponse> getPublicationsBySubscriptions(Pageable pageable, JwtEntity jwtEntity);
 }
