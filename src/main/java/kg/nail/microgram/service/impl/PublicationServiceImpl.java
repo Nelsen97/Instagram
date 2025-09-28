@@ -19,8 +19,6 @@ import java.util.List;
 public class PublicationServiceImpl implements PublicationService {
     final PublicationRepository publicationRepository;
 
-
-
     @Override
     public Publication getPublicationById(Long publicationId) {
         return publicationRepository.findById(publicationId).orElseThrow(

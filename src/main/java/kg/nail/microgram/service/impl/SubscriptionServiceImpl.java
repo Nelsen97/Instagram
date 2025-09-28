@@ -38,4 +38,9 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 
         return subscriptionRepository.findBySubscriberId(pageable, subscriberId).map(Subscription::getSubscriber);
     }
+
+    @Override
+    public long countBySubscriberId(Long subscriberId) {
+        return subscriptionRepository.countBySubscriberId(subscriberId);
+    }
 }

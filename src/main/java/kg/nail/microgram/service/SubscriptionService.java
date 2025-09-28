@@ -13,4 +13,6 @@ public interface SubscriptionService {
     boolean existsBySubscriberAndSubscriptionId(Long subscriber, Long subscriptionId);
 
     Page<User> getSubscriptionsBySubscriberId(Pageable pageable, Long subscriberId);
+
+    long countBySubscriberId(Long subscriberId);
 }

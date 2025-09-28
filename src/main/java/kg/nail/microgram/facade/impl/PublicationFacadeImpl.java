@@ -12,7 +12,6 @@ import kg.nail.microgram.exception.FileStorageException;
 import kg.nail.microgram.exception.NotFoundException;
 import kg.nail.microgram.facade.PublicationFacade;
 import kg.nail.microgram.mapper.PublicationMapper;
-import kg.nail.microgram.repository.PublicationRepository;
 import kg.nail.microgram.security.JwtEntity;
 import kg.nail.microgram.service.LikeService;
 import kg.nail.microgram.service.PublicationService;

@@ -7,6 +7,7 @@ import kg.nail.microgram.enums.Role;
 import kg.nail.microgram.enums.UserStatus;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import lombok.experimental.FieldNameConstants;
 import lombok.experimental.SuperBuilder;
 
 @Entity
@@ -17,6 +18,7 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @SuperBuilder
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@FieldNameConstants
 public class User extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
@@ -24,6 +26,9 @@ public class User extends BaseEntity {
     @Email
     @Column(name = "email", unique = true, nullable = false, length = 50)
     String email;
+
+    @Column(unique = true, nullable = false, length = 50)
+    String username;
 
     @Column(name = "password")
     String password;
@@ -39,9 +44,12 @@ public class User extends BaseEntity {
     String phoneNumber;
 
     @Builder.Default
-    Boolean isEnabled = true;
+    Boolean isEnabled = false;
+
+    @Column(nullable = false)
+    private String verificationCode;
 
     @Builder.Default
     @Enumerated(EnumType.STRING)
-    UserStatus userStatus = UserStatus.ACTIVE;
+    UserStatus userStatus = UserStatus.INACTIVE;
 }

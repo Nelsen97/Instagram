@@ -12,4 +12,5 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Long
 
     Page<Subscription> findBySubscriberId(Pageable pageable, Long subscriberId);
 
+    long countBySubscriberId(Long subscriberId);
 }

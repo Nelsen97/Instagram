@@ -1,7 +1,5 @@
 package kg.nail.microgram.dto.user.response;
 
-import kg.nail.microgram.enums.Role;
-import kg.nail.microgram.enums.UserStatus;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -11,14 +9,8 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserRegistrationResponse {
-
-    Long id;
-    String email;
+public class UsersByFilterResponse {
     String username;
-    Role role;
     String fullName;
-    String address;
-    String phoneNumber;
-    UserStatus userStatus;
+    Long subscribersCount;
 }

@@ -6,7 +6,7 @@ import kg.nail.microgram.entity.Comment;
 import java.util.List;
 
 public interface CommentService {
-        List<CommentPublicationResponse> getCommentsByPublicationId(Long publicationId);
+    List<CommentPublicationResponse> getCommentsByPublicationId(Long publicationId);
 
     Comment save(Comment comment);
 

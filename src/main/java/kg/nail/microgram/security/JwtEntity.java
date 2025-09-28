@@ -21,6 +21,7 @@ public class JwtEntity implements UserDetails {
     String fullName;
     String password;
     String email;
+    String username;
     boolean enabled;
 
     @Override

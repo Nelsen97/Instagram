@@ -23,6 +23,10 @@ public class UserRegistrationDTO {
     @Size(min = 3, max = 50, message = "Пароль не может быть меньше 3 и больше 50 символов")
     String password;
 
+    @NotBlank(message = "Username не может быть пустым")
+    @Size(min = 3, max = 50, message = "Username не может быть меньше 3 и больше 50 символов")
+    String username;
+
     @NotNull(message = "Роль не может быть пустой")
     @Column(nullable = false)
     Role role;
